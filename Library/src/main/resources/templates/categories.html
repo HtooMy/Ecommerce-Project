@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head th:replace="~{fragment :: head}"></head>
+
+<body id="page-top">
+
+	<!-- Page Wrapper -->
+	<div id="wrapper">
+
+		<!-- Sidebar -->
+		<div th:replace="~{fragment :: sideBar}"></div>
+		<!-- End of Sidebar -->
+
+		<!-- Content Wrapper -->
+		<div id="content-wrapper" class="d-flex flex-column">
+
+			<!-- Main Content -->
+			<div id="content">
+
+				<!-- Topbar -->
+				<div th:replace="~{fragment :: topBar}"></div>
+				<!-- End of Topbar -->
+
+				<!-- Begin Page Content -->
+				<div class="container-fluid">
+
+					<div th:if="${size == 0}">
+						<p>No category</p>
+					</div>
+
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add
+						New</button>
+
+					<div th:if="${failed}" class="text-center alert alert-danger">
+						<p th:text="${failed}"></p>
+					</div>
+
+					<div th:if="${nullError}" class="text-center alert alert-danger">
+						<p th:text="${nullError}"></p>
+					</div>
+
+					<div th:if="${success}" class="text-center alert alert-success">
+						<p th:text="${success}"></p>
+					</div>
+
+
+					<table class="table table-striped" th:if="${size > 0}">
+						<thead>
+							<tr>
+								<th scope="col">Category Index</th>
+								<th scope="col">Category Name</th>
+								<th scope="col">Action</th>
+							</tr>
+						</thead>
+						<tbody th:each="categories:${categories}">
+							<tr>
+								<th th:if="${categories.is_activated} == false" scope="row"><del th:text="${categories.id}"></del> </th>
+								<th th:if="${categories.is_activated} == true" scope="row" th:text="${categories.id}"></th>
+								<td th:if="${categories.is_activated} == false"> <del th:text="${categories.name}"></del> </td>
+								<td th:if="${categories.is_activated} == true" th:text="${categories.name}"></td>
+								<td>
+									<div>
+										<a id="editButton" class="btn btn-primary"
+											th:href="@{/findById (id=${categories.id})}">Update</a>
+										<a th:if="${categories.is_activated} == true" id="deleteButton" class="btn btn-danger"
+											th:href="@{/delete-category (id=${categories.id})}">Delete</a>
+										<a th:if="${categories.is_activated} == false" id="enableButton" class="btn btn-success"
+											th:href="@{/enable-category (id=${categories.id})}">Enable</a>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<!-- /.container-fluid -->
+
+			</div>
+			<!-- End of Main Content -->
+
+			<!-- Footer -->
+			<div th:replace="~{fragment :: footer}"></div>
+			<!-- End of Footer -->
+
+		</div>
+		<!-- End of Content Wrapper -->
+
+	</div>
+	<!-- End of Page Wrapper -->
+
+	<!-- Scroll to Top Button-->
+	<a class="scroll-to-top rounded" href="#page-top">
+		<i class="fas fa-angle-up"></i>
+	</a>
+
+	<!-- Logout Modal-->
+	<div th:replace="~{fragment :: logoutModal}"></div>
+
+	<!--Add Modal-->
+	<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<form th:action="@{/add-category}" method="post" th:object="${categoryNew}">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">New Category</h5>
+					</div>
+
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="detailsEdit" class="col-form-label">Name:</label>
+							<input type="text" class="form-control" id="nameAdd" th:field="*{name}">
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Save</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<!--Edit Modal-->
+	<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<form th:action="@{/update-category}" method="post">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">New Category</h5>
+					</div>
+
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="detailsEdit" class="col-form-label">ID:</label>
+							<input type="text" class="form-control" id="idEdit" name="id" readonly>
+						</div>
+					</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="detailsEdit" class="col-form-label">Name:</label>
+							<input type="text" class="form-control" id="nameEdit" name="name">
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="submit" class="btn btn-primary">Save</button>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div th:replace="~{fragment :: coreScript}"></div>
+	<script th:src="@{/js/category.js}"></script>
+	</div>
+</body>
+
+</html>
